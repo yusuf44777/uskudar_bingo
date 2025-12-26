@@ -648,15 +648,26 @@ if st.button("✨ HİKAYEMİ OLUŞTUR ✨", type="primary"):
         st.caption("Communitive Dentistry Üsküdar Bingo Kartın Hazır!")
         
         # İndirme Butonu
-        buf = BytesIO()
-        final_image.save(buf, format="PNG")
-        byte_im = buf.getvalue()
-        
+        rgb_image = final_image.convert("RGB") if final_image.mode != "RGB" else final_image
+        buf_png = BytesIO()
+        rgb_image.save(buf_png, format="PNG", optimize=True)
+        png_bytes = buf_png.getvalue()
+
+        buf_jpg = BytesIO()
+        rgb_image.save(buf_jpg, format="JPEG", quality=95, optimize=True)
+        jpg_bytes = buf_jpg.getvalue()
+
         st.download_button(
             label="📥 RESMİ İNDİR (HD KALİTE)",
-            data=byte_im,
+            data=png_bytes,
             file_name="communitive_dentistry_uskudar_bingo_2025.png",
             mime="image/png"
+        )
+        st.download_button(
+            label="📥 RESMİ İNDİR (iPhone için JPG)",
+            data=jpg_bytes,
+            file_name="communitive_dentistry_uskudar_bingo_2025.jpg",
+            mime="image/jpeg"
         )
         st.success(f"İndirdiğin resmi Instagram'da bizi etiketleyerek paylaşmayı unutma! {INSTAGRAM_HANDLE} 🎄")
 
